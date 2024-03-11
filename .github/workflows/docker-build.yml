@@ -73,7 +73,7 @@ jobs:
             IS_ARM=${{ env.IS_ARM }}
             PG_HINT_PLAN_VERSION=REL16_1_6_0
             PGAUDIT_VERSION=16.0
-            NEXUS=https://nexus.idatatlas.com
+            NEXUS=http://nexus.idatatlas.com
       -
         name: Export digest
         run: |
