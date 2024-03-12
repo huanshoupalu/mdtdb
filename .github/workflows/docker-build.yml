@@ -6,10 +6,21 @@ on:
       BASE_IMAGE:
         required: true
         type: string
+      MDTDB_VERSION:
+        required: true
+        type: string
+      PG_HINT_PLAN_VERSION:
+        required: true
+        type: string
+      PGAUDIT_VERSION:
+        required: true
+        type: string
     secrets:
       DOCKERHUB_USERNAME:
         required: true
       DOCKERHUB_TOKEN:
+        required: true
+      NEXUS:
         required: true
 env:
   REGISTRY_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/mdtdb
@@ -71,11 +82,11 @@ jobs:
           outputs: type=image,name=${{ env.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
           build-args: |
             BASE_IMAGE=${{ inputs.BASE_IMAGE }}
-            MDTDB_VERSION=18.4
+            MDTDB_VERSION=${{ inputs.MDTDB_VERSION }}
             IS_ARM=${{ env.IS_ARM }}
-            PG_HINT_PLAN_VERSION=REL16_1_6_0
+            PG_HINT_PLAN_VERSION=${{ inputs.PG_HINT_PLAN_VERSION }}
             PGAUDIT_VERSION=16.0
-            NEXUS=http://nexus.idatatlas.com
+            NEXUS=${{ secrets.NEXUS }}
       -
         name: Export digest
         run: |
@@ -122,7 +133,10 @@ jobs:
         name: Create manifest list and push
         working-directory: /tmp/digests
         run: |
-          VERSION="v16.18.4"
+          BASE_IMAGE=${{ inputs.BASE_IMAGE }}
+          MDTDB_VERSION=${{ inputs.MDTDB_VERSION }}
+          VERSION_PREFIX=$(echo $BASE_IMAGE | cut -d':' -f2 | cut -d'.' -f1)
+          VERSION="${VERSION_PREFIX}.$MDTDB_VERSION"
           docker buildx imagetools create $(jq -cr --arg version "$VERSION" '.tags | map((split(":")[0] + ":\($version)-" + split(":")[1])) | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
             $(printf '${{ env.REGISTRY_IMAGE }}@sha256:%s ' *)
       -
