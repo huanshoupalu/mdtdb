@@ -9,7 +9,7 @@ on:
     tags:
       - 'v*'
 env:
-  MDTDB_VERSION:18.4
+  MDTDB_VERSION: 18.4
 
 jobs:
   call-workflow-16:
