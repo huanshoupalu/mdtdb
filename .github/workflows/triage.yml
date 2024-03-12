@@ -16,7 +16,7 @@ jobs:
     uses: ./.github/workflows/docker-build.yml
     with:
       BASE_IMAGE: docker.idatatlas.com/postgres:16.2
-      MDTDB_VERSION: ${{env.MDTDB_VER}}
+      MDTDB_VERSION: 18.4
       PG_HINT_PLAN_VERSION: REL16_1_6_0
       PGAUDIT_VERSION: 16.0
     secrets:
@@ -28,7 +28,7 @@ jobs:
     uses: ./.github/workflows/docker-build.yml
     with:
       BASE_IMAGE: docker.idatatlas.com/postgres:15.6
-      MDTDB_VERSION: ${{env.MDTDB_VER}}
+      MDTDB_VERSION: 18.4
       PG_HINT_PLAN_VERSION: REL15_1_5_1
       PGAUDIT_VERSION: 1.7.0
     secrets:
