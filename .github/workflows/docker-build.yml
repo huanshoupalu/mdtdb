@@ -12,12 +12,7 @@ on:
 env:
   REGISTRY_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/mdtdb
 
-BASE_IMAGE=docker.idatatlas.com/postgres:16.2
-            MDTDB_VERSION=18.4
-            IS_ARM=${{ env.IS_ARM }}
-            PG_HINT_PLAN_VERSION=REL16_1_6_0
-            PGAUDIT_VERSION=16.0
-            NEXUS=http://nexus.idatatlas.com
+
 jobs:
   build:
     #environment: test
