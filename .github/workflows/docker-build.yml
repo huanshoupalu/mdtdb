@@ -12,6 +12,12 @@ on:
 env:
   REGISTRY_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/mdtdb
 
+BASE_IMAGE=docker.idatatlas.com/postgres:16.2
+            MDTDB_VERSION=18.4
+            IS_ARM=${{ env.IS_ARM }}
+            PG_HINT_PLAN_VERSION=REL16_1_6_0
+            PGAUDIT_VERSION=16.0
+            NEXUS=http://nexus.idatatlas.com
 jobs:
   build:
     #environment: test
@@ -20,11 +26,19 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform:
-          - linux/amd64
-#          - linux/arm/v6
-#          - linux/arm/v7
-          - linux/arm64
+        include:
+          - args:
+              - name: BASE_IMAGE
+                value: docker.idatatlas.com/postgres:16.2
+              - name: MDTDB_VERSION
+                value: 18.4
+              - name: PG_HINT_PLAN_VERSION
+                value: REL16_1_6_0
+              - name: PGAUDIT_VERSION
+                value: 16.0
+              - name: NEXUS
+                value: http://nexus.idatatlas.com
+            platforms: linux/amd64,linux/arm64
     steps:
       -
         name: Prepare
@@ -68,12 +82,8 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           outputs: type=image,name=${{ env.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
           build-args: |
-            BASE_IMAGE=docker.idatatlas.com/postgres:16.2
-            MDTDB_VERSION=18.4
+            ${{ fromJson(toJson(matrix.args)).[*].name }}=${{ fromJson(toJson(matrix.args)).[*].value }}
             IS_ARM=${{ env.IS_ARM }}
-            PG_HINT_PLAN_VERSION=REL16_1_6_0
-            PGAUDIT_VERSION=16.0
-            NEXUS=http://nexus.idatatlas.com
       -
         name: Export digest
         run: |
