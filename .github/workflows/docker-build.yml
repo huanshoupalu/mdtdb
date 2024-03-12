@@ -23,16 +23,11 @@ jobs:
       matrix:
         include:
           - args:
-              - name: BASE_IMAGE
-                value: docker.idatatlas.com/postgres:16.2
-              - name: MDTDB_VERSION
-                value: 18.4
-              - name: PG_HINT_PLAN_VERSION
-                value: REL16_1_6_0
-              - name: PGAUDIT_VERSION
-                value: 16.0
-              - name: NEXUS
-                value: http://nexus.idatatlas.com
+              - BASE_IMAGE: docker.idatatlas.com/postgres:16.2
+              - MDTDB_VERSION: 18.4
+              - PG_HINT_PLAN_VERSION: REL16_1_6_0
+              - PGAUDIT_VERSION: 16.0
+              - NEXUS: http://nexus.idatatlas.com
             platforms: linux/amd64,linux/arm64
     steps:
       -
@@ -77,8 +72,12 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           outputs: type=image,name=${{ env.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
           build-args: |
-            ${{ fromJson(toJson(matrix.args)).[*].name }}=${{ fromJson(toJson(matrix.args)).[*].value }}
+            BASE_IMAGE=${{ matrix.args.BASE_IMAGE }}
+            MDTDB_VERSION=${{ matrix.args.MDTDB_VERSION }}
             IS_ARM=${{ env.IS_ARM }}
+            PG_HINT_PLAN_VERSION=${{ matrix.args.PG_HINT_PLAN_VERSION }}
+            PGAUDIT_VERSION=${{ matrix.args.PGAUDIT_VERSION }}
+            NEXUS=${{ matrix.args.NEXUS }}
       -
         name: Export digest
         run: |
