@@ -125,9 +125,7 @@ jobs:
         name: Create manifest list and push
         working-directory: /tmp/digests
         run: |
-          VERSION=v16.18.4
-#          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
-#            $(printf '${{ env.REGISTRY_IMAGE }}@sha256:%s ' *)
+          VERSION="v16.18.4"
           docker buildx imagetools create $(jq -cr --arg version "$VERSION" '.tags | map((split(":")[0] + ":\($version)-" + split(":")[1])) | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
             $(printf '${{ env.REGISTRY_IMAGE }}@sha256:%s ' *)
       -
