@@ -1,0 +1,16 @@
+name: Call a reusable workflow
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'master'
+      - 'releases/**'
+    tags:
+      - 'v*'
+
+jobs:
+  call-workflow:
+    uses: ./.github/workflows/docker-build.yml
+    with:
+      BASE_IMAGE: docker.idatatlas.com/postgres:16.2

@@ -1,17 +1,14 @@
 name: Docker Build CI
 
 on:
-  workflow_dispatch:
-  push:
-    branches:
-      - 'master'
-      - 'releases/**'
-    tags:
-      - 'v*'
+  workflow_call:
+    inputs:
+      BASE_IMAGE:
+        required: true
+        type: string
 
 env:
   REGISTRY_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/mdtdb
-
 
 jobs:
   build:
@@ -21,21 +18,18 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - args:
-              - BASE_IMAGE: docker.idatatlas.com/postgres:16.2
-              - MDTDB_VERSION: 18.4
-              - PG_HINT_PLAN_VERSION: REL16_1_6_0
-              - PGAUDIT_VERSION: 16.0
-              - NEXUS: http://nexus.idatatlas.com
-            platforms: linux/amd64,linux/arm64
+        platform:
+          - linux/amd64
+#          - linux/arm/v6
+#          - linux/arm/v7
+          - linux/arm64
     steps:
       -
         name: Prepare
         run: |
-          platform=${{ matrix.args.platform }}
+          platform=${{ matrix.platform }}
           echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
-          if [[ ${{ matrix.args.platform }} == "linux/arm64" ]]; then
+          if [[ ${{ matrix.platform }} == "linux/arm64" ]]; then
               echo "IS_ARM=true" >> $GITHUB_ENV
           else
               echo "IS_ARM=false" >> $GITHUB_ENV
@@ -68,16 +62,16 @@ jobs:
         with:
           context: ./postgres/public/
           #file: ./postgres/public/Dockerfile
-          platforms: ${{ matrix.args.platform }}
+          platforms: ${{ matrix.platform }}
           labels: ${{ steps.meta.outputs.labels }}
           outputs: type=image,name=${{ env.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
           build-args: |
-            BASE_IMAGE=${{ matrix.args.BASE_IMAGE }}
-            MDTDB_VERSION=${{ matrix.args.MDTDB_VERSION }}
+            BASE_IMAGE=${{ inputs.BASE_IMAGE }}
+            MDTDB_VERSION=18.4
             IS_ARM=${{ env.IS_ARM }}
-            PG_HINT_PLAN_VERSION=${{ matrix.args.PG_HINT_PLAN_VERSION }}
-            PGAUDIT_VERSION=${{ matrix.args.PGAUDIT_VERSION }}
-            NEXUS=${{ matrix.args.NEXUS }}
+            PG_HINT_PLAN_VERSION=REL16_1_6_0
+            PGAUDIT_VERSION=16.0
+            NEXUS=http://nexus.idatatlas.com
       -
         name: Export digest
         run: |
