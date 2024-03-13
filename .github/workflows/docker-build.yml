@@ -15,6 +15,9 @@ on:
       PGAUDIT_VERSION:
         required: true
         type: string
+      VERSION_PREFIX:
+        required: true
+        type: string
     secrets:
       DOCKERHUB_USERNAME:
         required: true
@@ -90,15 +93,15 @@ jobs:
       -
         name: Export digest
         run: |
-          mkdir -p /tmp/digests
+          mkdir -p /tmp/digests${{inputs.VERSION_PREFIX}}
           digest="${{ steps.build.outputs.digest }}"
-          touch "/tmp/digests/${digest#sha256:}"
+          touch "/tmp/digests${{inputs.VERSION_PREFIX}}/${digest#sha256:}"
       -
         name: Upload digest
         uses: actions/upload-artifact@v4
         with:
           name: digests-${{ env.PLATFORM_PAIR }}
-          path: /tmp/digests/*
+          path: /tmp/digests${{inputs.VERSION_PREFIX}}/*
           if-no-files-found: error
           retention-days: 1
 
@@ -111,7 +114,7 @@ jobs:
         name: Download digests
         uses: actions/download-artifact@v4
         with:
-          path: /tmp/digests
+          path: /tmp/digests${{inputs.VERSION_PREFIX}}
           pattern: digests-*
           merge-multiple: true
       -
@@ -131,12 +134,9 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
         name: Create manifest list and push
-        working-directory: /tmp/digests
+        working-directory: /tmp/digests${{inputs.VERSION_PREFIX}}
         run: |
-          BASE_IMAGE=${{ inputs.BASE_IMAGE }}
-          MDTDB_VERSION=${{ inputs.MDTDB_VERSION }}
-          VERSION_PREFIX=$(echo $BASE_IMAGE | cut -d':' -f2 | cut -d'.' -f1)
-          VERSION="${VERSION_PREFIX}.$MDTDB_VERSION"
+          VERSION=${{inputs.VERSION_PREFIX}}.${{ inputs.MDTDB_VERSION }}
           docker buildx imagetools create $(jq -cr --arg version "$VERSION" '.tags | map((split(":")[0] + ":\($version)-" + split(":")[1])) | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
             $(printf '${{ env.REGISTRY_IMAGE }}@sha256:%s ' *)
       -
