@@ -15,10 +15,10 @@ jobs:
     uses: ./.github/workflows/docker-build.yml
     with:
       BASE_IMAGE: docker.idatatlas.com/postgres:16.2
-      MDTDB_VERSION: 18.4
+      MDTDB_VERSION: "18.4"
       PG_HINT_PLAN_VERSION: REL16_1_6_0
       PGAUDIT_VERSION: "16.0"
-      VERSION_PREFIX: 16
+      VERSION_PREFIX: "16"
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -28,10 +28,10 @@ jobs:
     uses: ./.github/workflows/docker-build.yml
     with:
       BASE_IMAGE: docker.idatatlas.com/postgres:15.6
-      MDTDB_VERSION: 18.4
+      MDTDB_VERSION: "18.4"
       PG_HINT_PLAN_VERSION: REL15_1_5_1
-      PGAUDIT_VERSION: 1.7.0
-      VERSION_PREFIX: 15
+      PGAUDIT_VERSION: "1.7.0"
+      VERSION_PREFIX: "15"
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -41,10 +41,10 @@ jobs:
     uses: ./.github/workflows/docker-build.yml
     with:
       BASE_IMAGE: docker.idatatlas.com/postgres:14.11
-      MDTDB_VERSION: 18.4
+      MDTDB_VERSION: "18.4"
       PG_HINT_PLAN_VERSION: REL14_1_4_2
-      PGAUDIT_VERSION: 1.6.2
-      VERSION_PREFIX: 14
+      PGAUDIT_VERSION: "1.6.2"
+      VERSION_PREFIX: "14"
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -54,10 +54,10 @@ jobs:
     uses: ./.github/workflows/docker-build.yml
     with:
       BASE_IMAGE: docker.idatatlas.com/postgres:13.14
-      MDTDB_VERSION: 18.4
+      MDTDB_VERSION: "18.4"
       PG_HINT_PLAN_VERSION: REL13_1_3_9
-      PGAUDIT_VERSION: 1.5.2
-      VERSION_PREFIX: 13
+      PGAUDIT_VERSION: "1.5.2"
+      VERSION_PREFIX: "13"
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
