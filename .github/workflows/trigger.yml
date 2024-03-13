@@ -14,7 +14,7 @@ jobs:
   call-workflow-16:
     uses: ./.github/workflows/docker-build.yml
     with:
-      BASE_IMAGE: docker.idatatlas.com/postgres:16.2
+      BASE_IMAGE: postgres:16.2
       MDTDB_VERSION: "18.4"
       PG_HINT_PLAN_VERSION: REL16_1_6_0
       PGAUDIT_VERSION: "16.0"
@@ -27,7 +27,7 @@ jobs:
   call-workflow-15:
     uses: ./.github/workflows/docker-build.yml
     with:
-      BASE_IMAGE: docker.idatatlas.com/postgres:15.6
+      BASE_IMAGE: postgres:15.6
       MDTDB_VERSION: "18.4"
       PG_HINT_PLAN_VERSION: REL15_1_5_1
       PGAUDIT_VERSION: "1.7.0"
@@ -40,7 +40,7 @@ jobs:
   call-workflow-14:
     uses: ./.github/workflows/docker-build.yml
     with:
-      BASE_IMAGE: docker.idatatlas.com/postgres:14.11
+      BASE_IMAGE: postgres:14.11
       MDTDB_VERSION: "18.4"
       PG_HINT_PLAN_VERSION: REL14_1_4_2
       PGAUDIT_VERSION: "1.6.2"
@@ -53,7 +53,7 @@ jobs:
   call-workflow-13:
     uses: ./.github/workflows/docker-build.yml
     with:
-      BASE_IMAGE: docker.idatatlas.com/postgres:13.14
+      BASE_IMAGE: postgres:13.14
       MDTDB_VERSION: "18.4"
       PG_HINT_PLAN_VERSION: REL13_1_3_9
       PGAUDIT_VERSION: "1.5.2"

@@ -94,7 +94,6 @@ jobs:
         name: Export digest
         run: |
           mkdir -p /tmp/digests${{inputs.VERSION_PREFIX}}
-          mkdir -p /tmp/digests${{inputs.VERSION_PREFIX}}
           digest="${{ steps.build.outputs.digest }}"
           touch "/tmp/digests${{inputs.VERSION_PREFIX}}/${digest#sha256:}"
       -
