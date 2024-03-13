@@ -18,7 +18,7 @@ jobs:
       BASE_IMAGE: docker.idatatlas.com/postgres:16.2
       MDTDB_VERSION: 18.4
       PG_HINT_PLAN_VERSION: REL16_1_6_0
-      PGAUDIT_VERSION: 16.0
+      PGAUDIT_VERSION: "16.0"
       VERSION_PREFIX: 16
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
