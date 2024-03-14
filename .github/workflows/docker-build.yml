@@ -46,6 +46,8 @@ jobs:
         name: Prepare
         run: |
           platform=${{ matrix.platform }}
+          dd=${{ secrets.DOCKERHUB_USERNAME }}
+          echo "name=${dd}"
           echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
           if [[ ${{ matrix.platform }} == "linux/arm64" ]]; then
               echo "IS_ARM=true" >> $GITHUB_ENV
